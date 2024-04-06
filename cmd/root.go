@@ -4,7 +4,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"cmp"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/brayden-ooi/bookkeeper/internal/handler"
 )
@@ -21,4 +24,8 @@ func Execute() {
 	// base routes
 	mux.HandleFunc("GET /", handler.Base)
 	mux.HandleFunc("GET /ping", handler.Ping)
+
+	port := cmp.Or(os.Getenv("PORT"), "8000")
+
+	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
 }
