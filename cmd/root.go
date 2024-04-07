@@ -21,6 +21,10 @@ import (
 func Execute() {
 	mux := http.NewServeMux()
 
+	// auth routes
+	mux.Handle("GET /sign-up", handler.SignUp())
+	mux.Handle("GET /sign-in", handler.SignIn())
+
 	// base routes
 	mux.HandleFunc("GET /", handler.Base)
 	mux.HandleFunc("GET /ping", handler.Ping)
