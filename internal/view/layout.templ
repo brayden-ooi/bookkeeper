@@ -1,0 +1,27 @@
+package view
+
+templ Header() {
+  <header class="flex h-[80px] justify-between p-6 items-center">
+    <div>
+      Bookkeeper
+    </div>
+    <div>
+      <button>Login</button>
+    </div>
+  </header>
+}
+
+templ Layout() {
+  <html lang="en">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <title>My Bookkeeper</title>
+      <meta name="description" content="My bookkeeper website" />
+      <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body>
+      { children... }
+    </body>
+  </html>
+}

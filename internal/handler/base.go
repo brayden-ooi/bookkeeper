@@ -1,9 +1,14 @@
 package handler
 
-import "net/http"
+import (
+	"net/http"
 
-func Base(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("hello world!"))
+	"github.com/a-h/templ"
+	page "github.com/brayden-ooi/bookkeeper/internal/view/pages/index"
+)
+
+func Base() *templ.ComponentHandler {
+	return templ.Handler(page.Index())
 }
 
 func Ping(w http.ResponseWriter, r *http.Request) {
