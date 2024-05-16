@@ -5,11 +5,11 @@ package cmd
 
 import (
 	"cmp"
-	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/brayden-ooi/bookkeeper/internal/handler"
+	"github.com/brayden-ooi/bookkeeper/internal/middleware"
 )
 
 // Main applications for this project.
@@ -21,6 +21,12 @@ import (
 func Execute() {
 	mux := http.NewServeMux()
 
+	mux.Handle("GET /static/",
+		http.StripPrefix("/static/", http.FileServer(http.Dir("web/static/"))))
+
+	// authed routes
+	mux.Handle("GET /dashboard", handler.Dashboard())
+
 	// auth routes
 	mux.Handle("GET /sign-up", handler.SignUp())
 	mux.Handle("GET /sign-in", handler.SignIn())
@@ -29,7 +35,10 @@ func Execute() {
 	mux.HandleFunc("GET /", handler.Base)
 	mux.HandleFunc("GET /ping", handler.Ping)
 
-	port := cmp.Or(os.Getenv("PORT"), "8000")
+	server := http.Server{
+		Addr:    ":" + cmp.Or(os.Getenv("PORT"), "8000"),
+		Handler: middleware.OnlyAuth(mux),
+	}
 
-	http.ListenAndServe(fmt.Sprintf(":%s", port), mux)
+	server.ListenAndServe()
 }
