@@ -1,4 +1,8 @@
 .vscode
 
+.env
+*_templ.go
+internal/database
+
 # build folder
 bin
