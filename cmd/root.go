@@ -10,6 +10,7 @@ import (
 
 	"github.com/brayden-ooi/bookkeeper/internal/handler"
 	"github.com/brayden-ooi/bookkeeper/internal/middleware"
+	"github.com/joho/godotenv"
 )
 
 // Main applications for this project.
@@ -19,6 +20,7 @@ import (
 // If the code is not reusable or if you don't want others to reuse it, put that code in the /internal directory.
 
 func Execute() {
+	godotenv.Load()
 	mux := http.NewServeMux()
 
 	mux.Handle("GET /static/",
