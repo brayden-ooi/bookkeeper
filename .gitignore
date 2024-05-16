@@ -3,6 +3,7 @@
 .env
 *_templ.go
 internal/database
+*.db
 
 # build folder
 bin
