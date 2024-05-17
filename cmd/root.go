@@ -10,6 +10,7 @@ import (
 
 	"github.com/brayden-ooi/bookkeeper/internal/handler"
 	"github.com/brayden-ooi/bookkeeper/internal/middleware"
+	_ "github.com/brayden-ooi/bookkeeper/internal/service"
 	"github.com/joho/godotenv"
 )
 
