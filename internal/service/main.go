@@ -26,4 +26,6 @@ func init() {
 	}
 
 	DB = database.New(conn)
+
+	conn.Exec("PRAGMA foreign_keys = ON")
 }
