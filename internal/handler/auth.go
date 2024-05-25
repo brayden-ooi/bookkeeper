@@ -2,13 +2,13 @@ package handler
 
 import (
 	"github.com/a-h/templ"
-	page "github.com/brayden-ooi/bookkeeper/internal/view/pages"
+	"github.com/brayden-ooi/bookkeeper/internal/view/pages"
 )
 
 func SignUp() *templ.ComponentHandler {
-	return templ.Handler(page.SignUp())
+	return templ.Handler(pages.SignUp())
 }
 
 func SignIn() *templ.ComponentHandler {
-	return templ.Handler(page.SignIn())
+	return templ.Handler(pages.SignIn())
 }

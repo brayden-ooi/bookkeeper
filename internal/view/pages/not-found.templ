@@ -1,13 +1,13 @@
-package view
+package pages
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
 
 templ NotFound() {
-  @view.Layout() {
-    @view.Header() {}
-    <main class="h-[calc(100vh-80px)] flex flex-col justify-center items-center">
-      <div>Page not found!</div>
-      <a href="/">Back to main page</a>
-    </main>
-  }
+	@view.Layout() {
+		@view.Header()
+		<main class="h-[calc(100vh-80px)] flex flex-col justify-center items-center">
+			<div>Page not found!</div>
+			<a href="/">Back to main page</a>
+		</main>
+	}
 }

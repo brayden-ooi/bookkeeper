@@ -5,17 +5,17 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	page "github.com/brayden-ooi/bookkeeper/internal/view/pages"
+	"github.com/brayden-ooi/bookkeeper/internal/view/pages"
 )
 
 func Base(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		w.WriteHeader(http.StatusNotFound)
-		page.NotFound().Render(context.Background(), w)
+		pages.NotFound().Render(context.Background(), w)
 
 		return
 	}
-	page.Index().Render(context.Background(), w)
+	pages.Index().Render(context.Background(), w)
 }
 
 func Ping(w http.ResponseWriter, r *http.Request) {
@@ -23,5 +23,9 @@ func Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 func NotFound() *templ.ComponentHandler {
-	return templ.Handler(page.Index())
+	return templ.Handler(pages.Index())
+}
+
+func Dashboard() *templ.ComponentHandler {
+	return templ.Handler(pages.Dashboard())
 }

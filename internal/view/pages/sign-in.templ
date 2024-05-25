@@ -1,0 +1,25 @@
+package pages
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+
+templ SignIn() {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			<section>
+				<form id="sign-in-form" className="flex flex-col gap-4">
+					<div>
+						<label for="sign-in-email">Email</label>
+						<input id="sign-in-email" type="email" required/>
+					</div>
+					<div>
+						<label for="sign-in-password">Password</label>
+						<input id="sign-in-password" type="password" required/>
+					</div>
+					<button type="submit">Sign in</button>
+				</form>
+			</section>
+		}
+		<script type="module" src="/static/index.js"></script>
+	}
+}

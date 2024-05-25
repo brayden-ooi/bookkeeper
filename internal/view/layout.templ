@@ -11,6 +11,12 @@ templ Header() {
   </header>
 }
 
+templ PageContainer(className string) {
+  <main class={ "h-[calc(100vh-80px)]", className }>
+    { children... }
+  </main>
+}
+
 templ Layout() {
   <html lang="en">
     <head>

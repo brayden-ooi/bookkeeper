@@ -1,0 +1,42 @@
+package pages
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+
+templ SignUp() {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			<section>
+				<form id="sign-up-form" className="flex flex-col gap-4">
+					<div>
+						<label for="sign-up-email">Email</label>
+						<input id="sign-up-email" type="email" required/>
+					</div>
+					<div>
+						<label for="sign-up-password">Password</label>
+						<input id="sign-up-password" type="password" required/>
+					</div>
+					<button type="submit">Sign up</button>
+				</form>
+			</section>
+		}
+		<script>
+      /** @type {HTMLInputElement} */
+      const form = document.querySelector("#sign-up-form");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.querySelector("#sign-up-email").value;
+        const password = document.querySelector("#sign-up-password").value;
+
+        const { data, error } = await _supabase.auth.signUp({
+          email,
+          password,
+        })
+
+        console.log(data, error);
+      })
+    </script>
+	}
+}

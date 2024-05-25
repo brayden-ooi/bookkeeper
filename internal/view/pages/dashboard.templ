@@ -2,11 +2,11 @@ package pages
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
 
-templ Index() {
+templ Dashboard() {
 	@view.Layout() {
 		@view.Header()
-		<main>
-			Hello Bookkeeper!!
-		</main>
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			Dashboard
+		}
 	}
 }
