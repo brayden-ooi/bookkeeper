@@ -4,7 +4,7 @@ CREATE TABLE accounts_account_tags (
   account_id INTEGER,
   account_tag_id INTEGER,
 
-  status TEXT DEFAULT "active",
+  status TEXT DEFAULT 'active',
   CONSTRAINT check_status CHECK (status = "active" OR status = "inactive"),
 
   CONSTRAINT fk_account_id FOREIGN KEY (account_id) REFERENCES accounts(id),
