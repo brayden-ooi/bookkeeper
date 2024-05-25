@@ -27,8 +27,11 @@ func Execute() {
 	mux.Handle("GET /static/",
 		http.StripPrefix("/static/", http.FileServer(http.Dir("web/static/"))))
 
-	// authed routes
+	/* authed routes */
 	mux.Handle("GET /dashboard", handler.Dashboard())
+
+	// accounts routes
+	mux.HandleFunc("GET /accounts", handler.ListAccounts)
 
 	// auth routes
 	mux.Handle("GET /sign-up", handler.SignUp())
