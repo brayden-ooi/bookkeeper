@@ -2,8 +2,7 @@ package account
 
 import (
 	"context"
-	"fmt"
-	"log"
+	"errors"
 	"strconv"
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
@@ -11,31 +10,50 @@ import (
 	"github.com/brayden-ooi/bookkeeper/internal/utils"
 )
 
-func Create(ctx context.Context) {
-	account, err := service.DB.CreateAccount(ctx, database.CreateAccountParams{
-		Name:    "Assets",
-		Type:    "debit",
-		OwnerID: int64(1),
-	})
+// write operations
+type acc_service struct {
+	user_id int64
+	ctx     context.Context
+}
 
-	fmt.Println(account)
-
-	if err != nil {
-		log.Fatal("Cant connect to database:", err)
+func Init(ctx context.Context) *acc_service {
+	return &acc_service{
+		user_id: utils.MyContext{ctx}.GetUserID(),
+		ctx:     ctx,
 	}
 }
 
-func GetByID(ctx context.Context, acc_id string) (database.Account, error) {
-	id, err := strconv.Atoi(acc_id)
+func (srv *acc_service) Create(id, name, t string) (database.Account, error) {
+	if id == "" || name == "" || t == "" {
+		return database.Account{}, errors.New("invalid create account arguments")
+	}
 
-	if err != nil {
+	return service.DB.CreateAccount(srv.ctx, database.CreateAccountParams{
+		ID:      id,
+		Name:    name,
+		Type:    t,
+		OwnerID: srv.user_id,
+	})
+}
+
+func (srv *acc_service) DeleteByID(id string) error {
+	if id == "" {
+		return errors.New("invalid delete account argument")
+	}
+	return service.DB.DeleteAccountByUserAndID(srv.ctx, database.DeleteAccountByUserAndIDParams{})
+}
+
+// read operations
+func (srv *acc_service) GetByID(acc_id string) (database.Account, error) {
+	// if non-numeric, throw early
+	if _, err := strconv.Atoi(acc_id); err != nil {
 		return database.Account{}, err
 	}
 
 	// fetch individual account data
-	account, err := service.DB.GetAccountByUserAndID(ctx, database.GetAccountByUserAndIDParams{
-		OwnerID: utils.MyContext{ctx}.GetUserID(),
-		ID:      int64(id),
+	account, err := service.DB.GetAccountByUserAndID(srv.ctx, database.GetAccountByUserAndIDParams{
+		OwnerID: srv.user_id,
+		ID:      acc_id,
 	})
 
 	if err != nil {
@@ -45,6 +63,6 @@ func GetByID(ctx context.Context, acc_id string) (database.Account, error) {
 	return account, nil
 }
 
-func List(ctx context.Context) ([]database.Account, error) {
-	return service.DB.ListAccountsByUser(ctx, utils.MyContext{ctx}.GetUserID())
+func (srv *acc_service) List() ([]database.Account, error) {
+	return service.DB.ListAccountsByUser(srv.ctx, srv.user_id)
 }

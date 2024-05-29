@@ -32,6 +32,10 @@ func Execute() {
 
 	// accounts routes
 	mux.HandleFunc("GET /accounts", handler.ListAccounts)
+	mux.HandleFunc("PUT /accounts", handler.UpdateAccount)
+	mux.HandleFunc("DELETE /accounts", handler.DeleteAccount)
+	mux.HandleFunc("GET /accounts/create", handler.CreateAccount)
+	mux.HandleFunc("POST /accounts/create", handler.CreateAccount)
 
 	// auth routes
 	mux.Handle("GET /sign-up", handler.SignUp())

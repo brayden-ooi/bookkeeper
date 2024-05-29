@@ -8,3 +8,6 @@ SELECT * FROM accounts WHERE owner_id = ?;
 
 -- name: GetAccountByUserAndID :one
 SELECT * FROM accounts WHERE owner_id = ? AND id = ?;
+
+-- name: DeleteAccountByUserAndID :exec
+DELETE FROM accounts WHERE owner_id = ? AND id = ?;
