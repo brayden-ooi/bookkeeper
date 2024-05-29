@@ -10,7 +10,6 @@ import (
 	"github.com/brayden-ooi/bookkeeper/internal/utils"
 )
 
-// write operations
 type acc_service struct {
 	user_id int64
 	ctx     context.Context
@@ -22,6 +21,15 @@ func Init(ctx context.Context) *acc_service {
 		ctx:     ctx,
 	}
 }
+
+// write operations
+type CreateAccountFormKey = string
+
+const (
+	Acc_id   CreateAccountFormKey = "id"
+	Acc_name CreateAccountFormKey = "name"
+	Acc_type CreateAccountFormKey = "type"
+)
 
 func (srv *acc_service) Create(id, name, t string) (database.Account, error) {
 	if id == "" || name == "" || t == "" {

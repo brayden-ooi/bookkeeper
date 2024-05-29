@@ -8,9 +8,14 @@ templ Index(accounts []database.Account) {
 		@view.Header()
 		@view.PageContainer("flex flex-col items-center justify-center") {
 			if len(accounts) != 0 {
+				<a href="/account/create">
+					<sl-button variant="default">+ Create</sl-button>
+				</a>
 				<ul>
 					for _, item := range accounts {
-						<li>{ item.Name }</li>
+						<li>
+							<a href={ templ.URL("/account?id=" + item.ID) }>{ item.Name }</a>
+						</li>
 					}
 				</ul>
 			} else {

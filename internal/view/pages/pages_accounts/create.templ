@@ -2,6 +2,7 @@ package pages_accounts
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
 import "net/http"
+import "github.com/brayden-ooi/bookkeeper/internal/service/account"
 
 templ Create() {
 	@view.Layout() {
@@ -9,18 +10,18 @@ templ Create() {
 		@view.PageContainer("flex flex-col items-center justify-center") {
 			<form action="/accounts/create" method={ http.MethodPost }>
 				<div>
-					<label for="id">Account ID</label>
-					<input type="text" id="id" name="id" placeholder="Account identifier" required/>
+					<label for={ account.Acc_id }>Account ID</label>
+					<input type="text" id="acc-id" name={ account.Acc_id } placeholder="Account identifier" required/>
 				</div>
 				<div>
-					<label for="name">Account name</label>
-					<input type="text" id="name" name="name" placeholder="Account name eg. Building" required/>
+					<label for={ account.Acc_name }>Account name</label>
+					<input type="text" id="acc-name" name={ account.Acc_name } placeholder="Account name eg. Building" required/>
 				</div>
 				<div>
 					<p>Account Type</p>
-					<input type="radio" id="debit" name="type" value="debit" checked/>
+					<input type="radio" id="debit" name={ account.Acc_type } value="debit" checked/>
 					<label for="debit">Debit</label>
-					<input type="radio" id="credit" name="type" value="credit" checked/>
+					<input type="radio" id="credit" name={ account.Acc_type } value="credit" checked/>
 					<label for="credit">Credit</label>
 				</div>
 				<input type="submit" value="Submit"/>

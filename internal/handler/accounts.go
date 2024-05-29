@@ -15,9 +15,9 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		// grab Form
-		acc_id := r.FormValue("id")
-		acc_name := r.FormValue("name")
-		acc_type := r.FormValue("type")
+		acc_id := r.FormValue(account.Acc_id)
+		acc_name := r.FormValue(account.Acc_name)
+		acc_type := r.FormValue(account.Acc_type)
 
 		if _, err := account.Init(ctx).Create(acc_id, acc_name, acc_type); err != nil {
 			log.Fatal(err)
@@ -31,36 +31,47 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 
 func UpdateAccount(w http.ResponseWriter, r *http.Request) {
 
+	http.Redirect(w, r, "/accounts", http.StatusSeeOther)
 }
 
 func ListAccounts(w http.ResponseWriter, r *http.Request) {
-	_id := r.URL.Query().Get("id")
 	ctx := r.Context()
 
-	if _id != "" {
-		acc, err := account.Init(ctx).GetByID(_id)
+	// fetch accounts data
+	accounts, err := account.Init(ctx).List()
 
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		pages_accounts.Index([]database.Account{acc}).Render(ctx, w)
-	} else {
-		// fetch accounts data
-		accounts, err := account.Init(ctx).List()
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// render the page
-		pages_accounts.Index(accounts).Render(ctx, w)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	// render the page
+	pages_accounts.Index(accounts).Render(ctx, w)
+}
+
+func GetAccount(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+	ctx := r.Context()
+
+	if id == "" {
+		log.Fatal("invalid read account argument")
+	}
+
+	acc, err := account.Init(ctx).GetByID(id)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pages_accounts.Index([]database.Account{acc}).Render(ctx, w)
 }
 
 func DeleteAccount(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	ctx := r.Context()
+
+	if id == "" {
+		log.Fatal("invalid delete account argument")
+	}
 
 	if err := account.Init(ctx).DeleteByID(id); err != nil {
 		log.Fatal(err)
