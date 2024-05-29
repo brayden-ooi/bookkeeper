@@ -1,0 +1,30 @@
+package pages_accounts
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "net/http"
+
+templ Create() {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			<form action="/accounts/create" method={ http.MethodPost }>
+				<div>
+					<label for="id">Account ID</label>
+					<input type="text" id="id" name="id" placeholder="Account identifier" required/>
+				</div>
+				<div>
+					<label for="name">Account name</label>
+					<input type="text" id="name" name="name" placeholder="Account name eg. Building" required/>
+				</div>
+				<div>
+					<p>Account Type</p>
+					<input type="radio" id="debit" name="type" value="debit" checked/>
+					<label for="debit">Debit</label>
+					<input type="radio" id="credit" name="type" value="credit" checked/>
+					<label for="credit">Credit</label>
+				</div>
+				<input type="submit" value="Submit"/>
+			</form>
+		}
+	}
+}

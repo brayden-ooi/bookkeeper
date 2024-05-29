@@ -1,0 +1,21 @@
+package pages_accounts
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "github.com/brayden-ooi/bookkeeper/internal/database"
+
+templ Index(accounts []database.Account) {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			if len(accounts) != 0 {
+				<ul>
+					for _, item := range accounts {
+						<li>{ item.Name }</li>
+					}
+				</ul>
+			} else {
+				<p>No accounts available. <a href="/accounts/create">Create one here</a></p>
+			}
+		}
+	}
+}

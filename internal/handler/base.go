@@ -6,6 +6,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/brayden-ooi/bookkeeper/internal/view/pages"
+	"github.com/brayden-ooi/bookkeeper/internal/view/pages/pages_dashboard"
 )
 
 func Base(w http.ResponseWriter, r *http.Request) {
@@ -27,5 +28,5 @@ func NotFound() *templ.ComponentHandler {
 }
 
 func Dashboard() *templ.ComponentHandler {
-	return templ.Handler(pages.Dashboard())
+	return templ.Handler(pages_dashboard.Index())
 }
