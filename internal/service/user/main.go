@@ -18,10 +18,10 @@ func Init(ctx context.Context) *user_service {
 	}
 }
 
-func (srv *user_service) Create() (database.User, error) {
+func (srv *user_service) Create(name string) (database.User, error) {
 	return service.DB.CreateUser(srv.ctx, database.CreateUserParams{
 		CreatedAt: time.Now().Unix(),
 		UpdatedAt: time.Now().Unix(),
-		Name:      "admin",
+		Name:      name,
 	})
 }

@@ -41,7 +41,9 @@ func Execute() {
 
 	// auth routes
 	mux.Handle("GET /sign-up", handler.SignUp())
+	mux.HandleFunc("POST /sign-up", handler.CreateUser)
 	mux.Handle("GET /sign-in", handler.SignIn())
+	mux.HandleFunc("POST /sign-in", handler.AuthenticateUser)
 
 	// base routes
 	mux.HandleFunc("GET /", handler.Base)
