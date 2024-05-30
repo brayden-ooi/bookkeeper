@@ -38,6 +38,13 @@ func Execute() {
 	mux.HandleFunc("GET /account/create", handler.CreateAccount)
 	mux.HandleFunc("POST /account/create", handler.CreateAccount)
 
+	// account tags routes
+	mux.HandleFunc("GET /account-tags", handler.ListTags)
+	mux.HandleFunc("GET /account-tag", handler.GetTag)
+	// mux.HandleFunc("PUT /account-tag", handler.UpdateAccount)
+	// mux.HandleFunc("DELETE /account-tag", handler.DeleteAccount)
+	mux.HandleFunc("GET /account-tag/create", handler.CreateTag)
+	mux.HandleFunc("POST /account-tag/create", handler.CreateTag)
 
 	// auth routes
 	mux.Handle("GET /sign-up", handler.SignUp())

@@ -5,7 +5,7 @@ CREATE TABLE account_tags (
   name TEXT NOT NULL,
   description TEXT,
 
-  owner_id INTEGER,
+  owner_id INTEGER NOT NULL,
   CONSTRAINT fk_owner_id FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
