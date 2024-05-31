@@ -47,7 +47,7 @@ func (srv *acc_tag_service) Create(id, name, description string) (database.Accou
 			String: description,
 			Valid:  len(description) != 0,
 		},
-		OwnerID: srv.user_id,
+		UserID: srv.user_id,
 	})
 }
 
@@ -55,8 +55,8 @@ func (srv *acc_tag_service) Create(id, name, description string) (database.Accou
 func (srv *acc_tag_service) GetByID(tag_id string) (database.AccountTag, error) {
 	// fetch individual tag data
 	tag, err := service.DB.GetAccountTagByUserAndID(srv.ctx, database.GetAccountTagByUserAndIDParams{
-		OwnerID: srv.user_id,
-		ID:      tag_id,
+		UserID: srv.user_id,
+		ID:     tag_id,
 	})
 
 	if err != nil {

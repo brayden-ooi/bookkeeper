@@ -1,13 +1,13 @@
 -- name: CreateAccount :one
-INSERT INTO accounts (id, name, type, owner_id) 
+INSERT INTO accounts (id, name, type, user_id) 
 VALUES (?, ?, ?, ?)
 RETURNING *;
 
 -- name: ListAccountsByUser :many
-SELECT * FROM accounts WHERE owner_id = ?;
+SELECT * FROM accounts WHERE user_id = ?;
 
 -- name: GetAccountByUserAndID :one
-SELECT * FROM accounts WHERE owner_id = ? AND id = ?;
+SELECT * FROM accounts WHERE user_id = ? AND id = ?;
 
 -- name: DeleteAccountByUserAndID :exec
-DELETE FROM accounts WHERE owner_id = ? AND id = ?;
+DELETE FROM accounts WHERE user_id = ? AND id = ?;

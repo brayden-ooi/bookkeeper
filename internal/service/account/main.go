@@ -37,10 +37,10 @@ func (srv *acc_service) Create(id, name, t string) (database.Account, error) {
 	}
 
 	return service.DB.CreateAccount(srv.ctx, database.CreateAccountParams{
-		ID:      id,
-		Name:    name,
-		Type:    t,
-		OwnerID: srv.user_id,
+		ID:     id,
+		Name:   name,
+		Type:   t,
+		UserID: srv.user_id,
 	})
 }
 
@@ -60,8 +60,8 @@ func (srv *acc_service) GetByID(acc_id string) (database.Account, error) {
 
 	// fetch individual account data
 	account, err := service.DB.GetAccountByUserAndID(srv.ctx, database.GetAccountByUserAndIDParams{
-		OwnerID: srv.user_id,
-		ID:      acc_id,
+		UserID: srv.user_id,
+		ID:     acc_id,
 	})
 
 	if err != nil {

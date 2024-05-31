@@ -1,12 +1,13 @@
 -- +goose Up
 
 CREATE TABLE account_tags (
-  id TEXT PRIMARY KEY,
+  id TEXT NOT NULL,
   name TEXT NOT NULL,
   description TEXT,
+  user_id INTEGER NOT NULL,
 
-  owner_id INTEGER NOT NULL,
-  CONSTRAINT fk_owner_id FOREIGN KEY (owner_id) REFERENCES users(id)
+  PRIMARY KEY (user_id, id),
+  CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- +goose Down
