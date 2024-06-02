@@ -12,6 +12,6 @@ type MyContext struct {
 	context.Context
 }
 
-func (myCtx MyContext) GetUserID() int64 {
-	return int64(myCtx.Value(CtxKeyID).(int))
+func (ctx MyContext) GetUserID() int64 {
+	return int64(ctx.Value(CtxKeyID).(int))
 }
