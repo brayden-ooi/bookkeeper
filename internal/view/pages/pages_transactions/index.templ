@@ -1,0 +1,28 @@
+package pages_transactions
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "github.com/brayden-ooi/bookkeeper/internal/database"
+import "fmt"
+import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
+
+templ Index(transactions []database.Transaction) {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			if len(transactions) != 0 {
+				<a href="/transaction/create">
+					<sl-button variant="default">+ Create</sl-button>
+				</a>
+				<ul>
+					for _, item := range transactions {
+						<li>
+							<a href={ templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, item.Year, transaction.Tx_ID, item.Counter)) }>{ fmt.Sprintf("%d-%d", item.Year, item.Counter) }</a>
+						</li>
+					}
+				</ul>
+			} else {
+				<p>No transactions available. <a href="/transaction/create">Create one here</a></p>
+			}
+		}
+	}
+}

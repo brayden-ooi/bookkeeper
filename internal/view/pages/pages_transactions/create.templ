@@ -1,0 +1,15 @@
+package pages_transactions
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "net/http"
+
+templ Create() {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			<form action="/transaction/create" method={ http.MethodPost }>
+				<input type="submit" value="Submit"/>
+			</form>
+		}
+	}
+}

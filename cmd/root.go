@@ -46,6 +46,14 @@ func Execute() {
 	mux.HandleFunc("GET /account-tag/create", handler.CreateTag)
 	mux.HandleFunc("POST /account-tag/create", handler.CreateTag)
 
+	// transaction routes
+	mux.HandleFunc("GET /transactions", handler.ListTransactions)
+	mux.HandleFunc("GET /transaction", handler.GetTransaction)
+	// mux.HandleFunc("PUT /transaction", handler.UpdateTransaction)
+	// mux.HandleFunc("DELETE /transaction", handler.DeleteAccount)
+	mux.HandleFunc("GET /transaction/create", handler.CreateTransaction)
+	mux.HandleFunc("POST /transaction/create", handler.CreateTransaction)
+
 	// auth routes
 	mux.Handle("GET /sign-up", handler.SignUp())
 	mux.HandleFunc("POST /sign-up", handler.CreateUser)
