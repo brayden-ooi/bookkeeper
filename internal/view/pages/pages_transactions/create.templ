@@ -2,14 +2,63 @@ package pages_transactions
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
 import "net/http"
+import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
+import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
+import "github.com/brayden-ooi/bookkeeper/internal/database"
 
-templ Create() {
+templ Create(txID string, accounts []database.Account) {
 	@view.Layout() {
 		@view.Header()
 		@view.PageContainer("flex flex-col items-center justify-center") {
-			<form action="/transaction/create" method={ http.MethodPost }>
+			<div>
+				<p>Transaction No. { txID }</p>
+			</div>
+			<form action="/transaction/create" method={ http.MethodPost } autocomplete="off">
+				<div>
+					<label for={ transaction.Tx_description }>Description</label>
+					<input
+ 						type="text"
+ 						id={ transaction.Tx_description }
+ 						name={ transaction.Tx_description }
+ 						required
+					/>
+				</div>
+				// entries
+				@transactionEntry(accounts, 0)
+				@transactionEntry(accounts, 1)
 				<input type="submit" value="Submit"/>
 			</form>
 		}
 	}
+}
+
+templ transactionEntry(accounts []database.Account, i int) {
+	<div class="border border-grey-200 rounded-lg p-3 m-3">
+		<div>
+			<label for={ entry.AccID(i) }>Account ID</label>
+			<select name={ entry.AccID(i) } id={ entry.AccID(i) } required>
+				for _, acc := range accounts {
+					<option value={ acc.ID }>{ acc.Name }</option>
+				}
+			</select>
+		</div>
+		<div>
+			<p>Entry Type</p>
+			<input type="radio" name={ entry.Type(i) } value="debit" checked/>
+			<label for="debit">Debit</label>
+			<input type="radio" name={ entry.Type(i) } value="credit"/>
+			<label for="credit">Credit</label>
+		</div>
+		<div>
+			<label for={ entry.Amount(i) }>Amount</label>
+			<input
+ 				type="number"
+ 				id={ entry.Amount(i) }
+ 				name={ entry.Amount(i) }
+ 				placeholder="amount"
+ 				required
+ 				min="0"
+			/>
+		</div>
+	</div>
 }
