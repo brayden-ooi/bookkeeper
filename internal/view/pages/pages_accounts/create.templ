@@ -8,7 +8,7 @@ templ Create() {
 	@view.Layout() {
 		@view.Header()
 		@view.PageContainer("flex flex-col items-center justify-center") {
-			<form action="/account/create" method={ http.MethodPost }>
+			<form action="/account/create" method={ http.MethodPost } autocomplete="off">
 				<div>
 					<label for={ account.Acc_id }>Account ID</label>
 					<input type="text" id="acc-id" name={ account.Acc_id } placeholder="Account identifier" required/>
