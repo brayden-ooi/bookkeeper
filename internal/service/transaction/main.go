@@ -4,10 +4,10 @@ package transaction
 
 import (
 	"context"
-	"time"
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
 	"github.com/brayden-ooi/bookkeeper/internal/service"
+	"github.com/brayden-ooi/bookkeeper/internal/service/entry"
 	"github.com/brayden-ooi/bookkeeper/internal/utils"
 )
 
@@ -28,6 +28,9 @@ type CreateTxFormKey = string
 
 const (
 	Tx_description CreateTxFormKey = "description"
+	Tx_date        CreateTxFormKey = "date"
+	// Tx_dr_id       CreateTxFormKey = "dr_id"
+	// Tx_cr_id       CreateTxFormKey = "cr_id"
 )
 
 type TxExternalIDKey = string
@@ -37,12 +40,19 @@ const (
 	Tx_ID   TxExternalIDKey = "id"
 )
 
-func (srv *tx_service) Create() (database.Transaction, error) {
-	tx, err := service.DB.CreateTransaction(srv.ctx, database.CreateTransactionParams{
+func (srv *tx_service) CreateDraft() (database.Transaction, error) {
+	return service.DB.CreateDraft(srv.ctx, database.CreateDraftParams{
+		ID:     srv.user_id,
+		UserID: srv.user_id,
+	})
+}
+
+func (srv *tx_service) UpdateDraft(counter int64, description string, entries []entry.Draft) (database.Transaction, error) {
+	// TODO refactor to validate entry input first
+	tx, err := service.DB.UpdateDraft(srv.ctx, database.UpdateDraftParams{
 		Year:        int64(2024),
-		ID:          srv.user_id,
-		Description: "test",
-		CreatedAt:   time.Now().Unix(),
+		Description: description,
+		Counter:     counter,
 		UserID:      srv.user_id,
 	})
 
@@ -50,7 +60,13 @@ func (srv *tx_service) Create() (database.Transaction, error) {
 		return database.Transaction{}, err
 	}
 
-	// TODO
+	// create entries
+	err = entry.Init(srv.ctx).BulkCreate(tx.ID, entries)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
 	return tx, nil
 }
 

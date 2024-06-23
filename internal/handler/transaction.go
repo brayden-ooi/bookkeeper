@@ -7,7 +7,10 @@ import (
 	"net/http"
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
+	"github.com/brayden-ooi/bookkeeper/internal/service/account"
+	"github.com/brayden-ooi/bookkeeper/internal/service/entry"
 	"github.com/brayden-ooi/bookkeeper/internal/service/transaction"
+	"github.com/brayden-ooi/bookkeeper/internal/service/user"
 	"github.com/brayden-ooi/bookkeeper/internal/view/pages/pages_transactions"
 )
 
@@ -17,15 +20,47 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		// grab Form
-		// TODO
+		// year := r.PostFormValue(transaction.Tx_year)
+		description := r.PostFormValue(transaction.Tx_description)
+		// date := r.PostFormValue(transaction.Tx_date)
 
-		if _, err := transaction.Init(ctx).Create(); err != nil {
+		counter, err := user.Init(ctx).GetTxCounter()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// TODO TEMP FIELDS
+		var entry_drafts []entry.Draft
+
+		for i := range 2 {
+			entry_drafts = append(entry_drafts, entry.Draft{
+				AccountID: r.PostFormValue(entry.AccID(i)),
+				Type:      r.PostFormValue(entry.Type(i)),
+				Amount:    r.PostFormValue(entry.Amount(i)),
+			})
+		}
+
+		if _, err := transaction.Init(ctx).UpdateDraft(counter, description, entry_drafts); err != nil {
 			log.Fatal(err)
 		}
 
 		http.Redirect(w, r, "/transactions", http.StatusSeeOther)
 	case http.MethodGet:
-		pages_transactions.Create().Render(ctx, w)
+		draft, err := transaction.Init(ctx).CreateDraft()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// fetch accounts
+		accounts, err := account.Init(ctx).List()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// create a transaction draft
+		pages_transactions.Create(strconv.Itoa(int(draft.Counter)), accounts).Render(ctx, w)
 	}
 }
 
