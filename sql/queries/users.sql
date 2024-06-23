@@ -7,5 +7,8 @@ RETURNING *;
 SELECT * FROM users
 WHERE id = ? LIMIT 1;
 
+-- name: GetTransactionCounter :one
+SELECT transaction_counter FROM users WHERE id = ? LIMIT 1;
+
 -- name: ResetCounterByUser :exec
 UPDATE users SET transaction_counter = 0 WHERE id = ?;
