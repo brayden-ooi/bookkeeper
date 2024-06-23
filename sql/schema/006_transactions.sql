@@ -6,7 +6,7 @@ CREATE TABLE transactions (
   counter INTEGER NOT NULL,
   description TEXT NOT NULL,
   created_at INTEGER NOT NULL,
-  status TEXT DEFAULT 'draft'
+  status TEXT NOT NULL DEFAULT 'draft'
   CONSTRAINT check_status CHECK (status = 'active' OR status = 'inactive' OR status = 'draft'),
 
   user_id INTEGER NOT NULL,
