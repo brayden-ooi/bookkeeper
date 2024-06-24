@@ -7,24 +7,19 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/account"
 templ Create() {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
-			<form action="/account/create" method={ http.MethodPost } autocomplete="off">
-				<div>
-					<label for={ account.Acc_id }>Account ID</label>
-					<input type="text" id="acc-id" name={ account.Acc_id } placeholder="Account identifier" required/>
-				</div>
-				<div>
-					<label for={ account.Acc_name }>Account name</label>
-					<input type="text" id="acc-name" name={ account.Acc_name } placeholder="Account name eg. Building" required/>
-				</div>
-				<div>
-					<p>Account Type</p>
-					<input type="radio" id="debit" name={ account.Acc_type } value="debit" checked/>
-					<label for="debit">Debit</label>
-					<input type="radio" id="credit" name={ account.Acc_type } value="credit" checked/>
-					<label for="credit">Credit</label>
-				</div>
-				<input type="submit" value="Submit"/>
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex items-center w-full">
+				<a href="/accounts"><sl-button variant="text">{ "<" }</sl-button></a>
+				<h2>Create an Account</h2>
+			</div>
+			<form action="/account/create" method={ http.MethodPost } autocomplete="off" class="flex flex-col gap-2">
+				<sl-input type="text" id="acc-id" name={ account.Acc_id } placeholder="Account identifier" required label="Account ID"></sl-input>
+				<sl-input type="text" id="acc-name" name={ account.Acc_name } placeholder="Account name eg. Building" required label="Account name"></sl-input>
+				<sl-radio-group label="Account Type" name={ account.Acc_type } required>
+					<sl-radio value="debit" class="mb-2">Debit</sl-radio>
+					<sl-radio value="credit">Credit</sl-radio>
+				</sl-radio-group>
+				<sl-button type="submit" variant="primary">Submit</sl-button>
 			</form>
 		}
 	}

@@ -6,18 +6,32 @@ import "github.com/brayden-ooi/bookkeeper/internal/database"
 templ Index(accounts []database.Account) {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex justify-between items-center w-full">
+				<h2>Accounts</h2>
+				<a href="/account/create"><sl-button variant="default">+ Create</sl-button></a>
+			</div>
 			if len(accounts) != 0 {
-				<a href="/account/create">
-					<sl-button variant="default">+ Create</sl-button>
-				</a>
-				<ul>
-					for _, item := range accounts {
-						<li>
-							<a href={ templ.URL("/account?id=" + item.ID) }>{ item.Name }</a>
-						</li>
-					}
-				</ul>
+				<table class="border border-[--sl-color-gray-400] my-5 rounded-md">
+					<thead>
+						<tr>
+							<th scope="col" class="border border-[--sl-color-gray-400] py-2">ID</th>
+							<th scope="col" class="border border-[--sl-color-gray-400] py-2">Name</th>
+							<th scope="col" class="border border-[--sl-color-gray-400] py-2">Tags</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, item := range accounts {
+							<tr>
+								<th scope="row" class="border border-[--sl-color-gray-400] py-2">{ item.ID }</th>
+								<td class="border border-[--sl-color-gray-400] p-2 text-center">
+									<a href={ templ.URL("/account?id=" + item.ID) }>{ item.Name }</a>
+								</td>
+								<td class="border border-[--sl-color-gray-400] p-2 text-center">{ item.Name }</td>
+							</tr>
+						}
+					</tbody>
+				</table>
 			} else {
 				<p>No accounts available. <a href="/account/create">Create one here</a></p>
 			}
