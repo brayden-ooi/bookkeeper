@@ -3,7 +3,6 @@ package account
 import (
 	"context"
 	"errors"
-	"strconv"
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
 	"github.com/brayden-ooi/bookkeeper/internal/service"
@@ -53,9 +52,8 @@ func (srv *acc_service) DeleteByID(id string) error {
 
 // read operations
 func (srv *acc_service) GetByID(acc_id string) (database.Account, error) {
-	// if non-numeric, throw early
-	if _, err := strconv.Atoi(acc_id); err != nil {
-		return database.Account{}, err
+	if acc_id == "" {
+		return database.Account{}, errors.New("invalid account id")
 	}
 
 	// fetch individual account data
