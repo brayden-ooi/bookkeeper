@@ -33,7 +33,9 @@ templ Index(accounts []database.Account) {
 					</tbody>
 				</table>
 			} else {
-				<p>No accounts available. <a href="/account/create">Create one here</a></p>
+				<div class="flex flex-col items-center justify-center h-screen">
+					<p>No accounts available. <a href="/account/create">Create one here</a></p>
+				</div>
 			}
 		}
 	}
