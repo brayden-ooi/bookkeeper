@@ -10,7 +10,7 @@ CREATE TABLE accounts_account_tags (
 
   PRIMARY KEY (account_id, account_user_id, account_tag_id),
   CONSTRAINT fk_account_id_account_user_id FOREIGN KEY (account_id, account_user_id) REFERENCES accounts(id, user_id),
-  CONSTRAINT fk_account_tag_id FOREIGN KEY (account_tag_id) REFERENCES account_tags(id)
+  CONSTRAINT fk_account_tag_id FOREIGN KEY (account_user_id, account_tag_id) REFERENCES account_tags(user_id, id)
 );
 
 -- +goose Down

@@ -7,21 +7,16 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/account_tag"
 templ Create() {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
-			<form action="/account-tag/create" method={ http.MethodPost }>
-				<div>
-					<label for={ account_tag.Tag_id }>Tag ID</label>
-					<input type="text" id="tag-id" name={ account_tag.Tag_id } placeholder="Account Tag identifier" required/>
-				</div>
-				<div>
-					<label for={ account_tag.Tag_name }>Tag name</label>
-					<input type="text" id="tag-name" name={ account_tag.Tag_name } placeholder="Tag name eg. Assets" required/>
-				</div>
-				<div>
-					<label for={ account_tag.Tag_description }>Description</label>
-					<input type="text" id="tag-description" name={ account_tag.Tag_description } placeholder="Provide some additional context"/>
-				</div>
-				<input type="submit" value="Submit"/>
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex items-center w-full">
+				<a href="/account-tags"><sl-button variant="text">{ "<" }</sl-button></a>
+				<h2>Create an Account</h2>
+			</div>
+			<form action="/account-tag/create" method={ http.MethodPost } class="flex flex-col gap-2">
+				<sl-input type="text" id="tag-id" name={ account_tag.Tag_id } placeholder="Account Tag identifier" required label="ID"></sl-input>
+				<sl-input type="text" id="tag-name" name={ account_tag.Tag_name } placeholder="Tag name eg. Assets" required label="Name"></sl-input>
+				<sl-input type="text" id="tag-description" name={ account_tag.Tag_description } placeholder="Provide some additional context" label="Description"></sl-input>
+				<sl-button type="submit" variant="primary">Submit</sl-button>
 			</form>
 		}
 	}
