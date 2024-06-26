@@ -1,42 +1,41 @@
 package pages_sign_up
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "net/http"
+import "github.com/brayden-ooi/bookkeeper/internal/service/user"
 
 templ Index() {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
-			<section>
-				<form id="sign-up-form" className="flex flex-col gap-4">
-					<div>
-						<label for="sign-up-email">Email</label>
-						<input id="sign-up-email" type="email" required/>
-					</div>
-					<div>
-						<label for="sign-up-password">Password</label>
-						<input id="sign-up-password" type="password" required/>
-					</div>
-					<button type="submit">Sign up</button>
-				</form>
-			</section>
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex items-center w-full">
+				<h2>Sign Up</h2>
+			</div>
+			<form action="/sign-up" method={ http.MethodPost } id="sign-up-form" class="flex flex-col gap-2">
+				<sl-input id="sign-up-email" type="email" name={ user.Email } required label="Email"></sl-input>
+				<sl-input id="sign-up-password" type="password" name={ user.Password } required label="Password"></sl-input>
+				<sl-input id="sign-up-confirm-password" type="password" name={ user.ConfirmPassword } required label="Confirm Password"></sl-input>
+				<sl-button type="submit" variant="primary">Sign up</sl-button>
+			</form>
 		}
 		<script>
-      /** @type {HTMLInputElement} */
-      const form = document.querySelector("#sign-up-form");
+		  const form = document.querySelector("#sign-up-form");
+		  form.addEventListener("submit", async (e) => {
+		    const password = document.querySelector("#sign-up-password").value;
+		    const confirmPasword = document.querySelector("#sign-up-confirm-password").value;
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+        if (password !== confirmPasword) {
+          e.preventDefault();
+          alert("unmatched passwords");
+        }
 
-        const email = document.querySelector("#sign-up-email").value;
-        const password = document.querySelector("#sign-up-password").value;
-
-        const { data, error } = await _supabase.auth.signUp({
-          email,
-          password,
-        })
-
-        console.log(data, error);
-      })
-    </script>
+		        // const email = document.querySelector("#sign-up-email").value;
+            // const { data, error } = await _supabase.auth.signUp({
+            //   email,
+            //   password,
+            // })
+            // console.log(data, error);
+		  })
+		</script>
 	}
 }
