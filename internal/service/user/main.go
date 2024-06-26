@@ -20,8 +20,31 @@ func Init(ctx context.Context) *user_service {
 	}
 }
 
-func Create(ctx context.Context, name string) (database.User, error) {
-	return service.DB.CreateUser(ctx, name)
+// write operations
+type CreateUserFormKey = string
+
+const (
+	Email           CreateUserFormKey = "email"
+	Password        CreateUserFormKey = "password"
+	ConfirmPassword CreateUserFormKey = "confirm-password"
+)
+
+func Create(ctx context.Context, name, email, pw string) (int, error) {
+	// create user record
+	user, err := service.DB.CreateUser(ctx, name)
+
+	if err != nil {
+		return 0, err
+	}
+
+	// create user credential record
+	err = service.DB.CreateUserCredentials(ctx, database.CreateUserCredentialsParams{
+		UserID:   user.ID,
+		Email:    email,
+		Password: pw,
+	})
+
+	return int(user.ID), err
 }
 
 // func GetByID(id int) database.User {
