@@ -31,6 +31,7 @@ func CreateTag(w http.ResponseWriter, r *http.Request) {
 }
 
 func ListTags(w http.ResponseWriter, r *http.Request) {
+	adminFlag := r.URL.Query().Get("_admin")
 	ctx := r.Context()
 
 	tags, err := account_tag.Init(ctx).List()
@@ -39,10 +40,18 @@ func ListTags(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
+	var filteredTags []database.AccountTag
+
+	if adminFlag == "1" {
+		filteredTags = tags
+	} else {
+		filteredTags = utils.Filter(tags, func(acc database.AccountTag) bool {
+			return string(acc.ID[0]) != "_"
+		})
+	}
+
 	// render the page
-	pages_account_tags.Index(utils.Filter(tags, func(acc database.AccountTag) bool {
-		return string(acc.ID[0]) != "_"
-	})).Render(ctx, w)
+	pages_account_tags.Index(filteredTags).Render(ctx, w)
 }
 
 func GetTag(w http.ResponseWriter, r *http.Request) {
