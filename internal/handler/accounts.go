@@ -6,6 +6,8 @@ import (
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
 	"github.com/brayden-ooi/bookkeeper/internal/service/account"
+	"github.com/brayden-ooi/bookkeeper/internal/service/account_tag"
+	"github.com/brayden-ooi/bookkeeper/internal/utils"
 	"github.com/brayden-ooi/bookkeeper/internal/view/pages/pages_accounts"
 )
 
@@ -25,7 +27,21 @@ func CreateAccount(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/accounts", http.StatusSeeOther)
 	case http.MethodGet:
-		pages_accounts.Create().Render(ctx, w)
+		// get account tags
+		tags, err := account_tag.Init(ctx).List()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		pages_accounts.Create(
+			utils.Filter(tags, func(tag database.AccountTag) bool {
+				return string(tag.ID[0]) == "_" && string(tag.ID[len(tag.ID)-1]) == "0"
+			}),
+			utils.Filter(tags, func(tag database.AccountTag) bool {
+				return string(tag.ID[0]) != "_"
+			}),
+		).Render(ctx, w)
 	}
 }
 

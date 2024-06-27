@@ -3,8 +3,9 @@ package pages_accounts
 import "github.com/brayden-ooi/bookkeeper/internal/view"
 import "net/http"
 import "github.com/brayden-ooi/bookkeeper/internal/service/account"
+import "github.com/brayden-ooi/bookkeeper/internal/database"
 
-templ Create() {
+templ Create(types []database.AccountTag, tags []database.AccountTag) {
 	@view.Layout() {
 		@view.Header()
 		@view.PageContainer("flex flex-col p-5") {
@@ -15,10 +16,12 @@ templ Create() {
 			<form action="/account/create" method={ http.MethodPost } autocomplete="off" class="flex flex-col gap-2">
 				<sl-input type="text" id="acc-id" name={ account.Acc_id } placeholder="Account identifier" required label="Account ID"></sl-input>
 				<sl-input type="text" id="acc-name" name={ account.Acc_name } placeholder="Account name eg. Building" required label="Account name"></sl-input>
-				<sl-radio-group label="Account Type" name={ account.Acc_type } required>
-					<sl-radio value="debit" class="mb-2">Debit</sl-radio>
-					<sl-radio value="credit">Credit</sl-radio>
-				</sl-radio-group>
+				<label for={ account.Acc_type }>Account Type</label>
+				<select name={ account.Acc_type } required class="border border-[--sl-color-gray-300] p-2 rounded-md">
+					for _, item := range types {
+						<option value={ item.ID }>{ item.Name }</option>
+					}
+				</select>
 				<sl-button type="submit" variant="primary">Submit</sl-button>
 			</form>
 		}

@@ -3,7 +3,7 @@
 CREATE TABLE accounts_account_tags (
   account_id TEXT NOT NULL,
   account_user_id INTEGER NOT NULL,
-  account_tag_id INTEGER NOT NULL,
+  account_tag_id TEXT NOT NULL,
 
   status TEXT NOT NULL DEFAULT 'active',
   CONSTRAINT check_status CHECK (status = 'active' OR status = 'inactive'),
