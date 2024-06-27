@@ -6,6 +6,7 @@ import (
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
 	"github.com/brayden-ooi/bookkeeper/internal/service/account_tag"
+	"github.com/brayden-ooi/bookkeeper/internal/utils"
 	"github.com/brayden-ooi/bookkeeper/internal/view/pages/pages_account_tags"
 )
 
@@ -39,7 +40,9 @@ func ListTags(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// render the page
-	pages_account_tags.Index(tags).Render(ctx, w)
+	pages_account_tags.Index(utils.Filter(tags, func(acc database.AccountTag) bool {
+		return string(acc.ID[0]) != "_"
+	})).Render(ctx, w)
 }
 
 func GetTag(w http.ResponseWriter, r *http.Request) {
