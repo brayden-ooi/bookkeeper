@@ -8,20 +8,36 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
 templ Index(transactions []database.Transaction) {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex justify-between items-center w-full">
+				<h2>Transactions</h2>
+				<a href="/transaction/create"><sl-button variant="default">+ Create</sl-button></a>
+			</div>
 			if len(transactions) != 0 {
-				<a href="/transaction/create">
-					<sl-button variant="default">+ Create</sl-button>
-				</a>
-				<ul>
-					for _, item := range transactions {
-						<li>
-							<a href={ templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, item.Year, transaction.Tx_ID, item.Counter)) }>{ fmt.Sprintf("%d-%d", item.Year, item.Counter) }</a>
-						</li>
-					}
-				</ul>
+				<table class="border border-[--sl-color-gray-400] my-5 rounded-md">
+					<thead>
+						<tr>
+							<th scope="col" class="border border-[--sl-color-gray-400] py-2">Year</th>
+							<th scope="col" class="border border-[--sl-color-gray-400] py-2">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, item := range transactions {
+							<tr>
+								<th scope="row" class="border border-[--sl-color-gray-400] py-2">
+									<a href={ templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, item.Year, transaction.Tx_ID, item.Counter)) }>{ fmt.Sprintf("%d-%d", item.Year, item.Counter) }</a>
+								</th>
+								<td class="border border-[--sl-color-gray-400] p-2 text-center">
+									<a href={ templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, item.Year, transaction.Tx_ID, item.Counter)) }>{ item.Description }</a>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
 			} else {
-				<p>No transactions available. <a href="/transaction/create">Create one here</a></p>
+				<div class="flex flex-col items-center justify-center h-screen">
+					<p>No transactions available. <a href="/transaction/create">Create one here</a></p>
+				</div>
 			}
 		}
 	}
