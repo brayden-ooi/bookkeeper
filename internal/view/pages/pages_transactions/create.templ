@@ -2,6 +2,9 @@ package pages_transactions
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
 import "net/http"
+import "github.com/brayden-ooi/bookkeeper/internal/database"
+import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
+import "fmt"
 import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
 import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
 import "github.com/brayden-ooi/bookkeeper/internal/database"
@@ -14,51 +17,44 @@ templ Create(txID string, accounts []database.Account) {
 				<p>Transaction No. { txID }</p>
 			</div>
 			<form action="/transaction/create" method={ http.MethodPost } autocomplete="off">
-				<div>
-					<label for={ transaction.Tx_description }>Description</label>
-					<input
- 						type="text"
- 						id={ transaction.Tx_description }
- 						name={ transaction.Tx_description }
- 						required
-					/>
-				</div>
+				@transactionDescriptionInput("")
 				// entries
-				@transactionEntry(accounts, 0)
-				@transactionEntry(accounts, 1)
-				<input type="submit" value="Submit"/>
+				for i := range 2 {
+					@transactionEntry(
+            txEntryAccountSelector(accounts, i),
+            txEntryTypeSelector(i),
+            txEntryAmtInput("0", i),
+          i)
+				}
 			</form>
 		}
 	}
 }
 
-templ transactionEntry(accounts []database.Account, i int) {
-	<div class="border border-grey-200 rounded-lg p-3 m-3">
-		<div>
-			<label for={ entry.AccID(i) }>Account ID</label>
+templ txEntryAccountSelector(accounts []database.Account, i int) {
 			<select name={ entry.AccID(i) } id={ entry.AccID(i) } required>
 				for _, acc := range accounts {
 					<option value={ acc.ID }>{ acc.Name }</option>
 				}
 			</select>
-		</div>
-		<div>
-			<p>Entry Type</p>
-			<input type="radio" name={ entry.Type(i) } value="debit" checked/>
-			<label for="debit">Debit</label>
-			<input type="radio" name={ entry.Type(i) } value="credit"/>
-			<label for="credit">Credit</label>
-		</div>
-		<div>
-			<label for={ entry.Amount(i) }>Amount</label>
-			<input
+}
+
+templ txEntryTypeSelector(i int) {
+	<input type="radio" name={ entry.Type(i) } id={ fmt.Sprintf("%s-debit", entry.Type(i)) } value="debit" checked/>
+	<label for={ fmt.Sprintf("%s-debit", entry.Type(i)) }>Debit</label>
+	<input type="radio" name={ entry.Type(i) } id={ fmt.Sprintf("%s-credit", entry.Type(i)) } value="credit"/>
+	<label for={ fmt.Sprintf("%s-credit", entry.Type(i)) }>Credit</label>
+}
+
+templ txEntryAmtInput(amt string, i int) {
+	<sl-input
  				type="number"
  				id={ entry.Amount(i) }
  				name={ entry.Amount(i) }
  				placeholder="amount"
  				required
  				min="0"
-			/>
-		</div>
-	</div>
+ 		label="Amount"
+ 		value={ amt }
+	></sl-input>
 }

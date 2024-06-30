@@ -1,0 +1,55 @@
+package pages_transactions
+
+import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "net/http"
+import "fmt"
+import "strconv"
+import "github.com/brayden-ooi/bookkeeper/internal/database"
+import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
+import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
+
+templ Edit(tx database.Transaction, entries []database.GetEntriesByTxRow) {
+	@view.Layout() {
+		@view.Header()
+		@view.PageContainer("flex flex-col items-center justify-center") {
+			<div>
+				<p>Transaction No. { strconv.Itoa(int(tx.Counter)) }</p>
+			</div>
+			<form action={ string(templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, tx.Year, transaction.Tx_ID, tx.Counter))) } method={ http.MethodPut } autocomplete="off">
+				@transactionDescriptionInput(tx.Description)
+				// entries
+				for i, entry := range entries {
+					@transactionEntry(
+            transactionEntryAccountView(entry.Name),
+            txEntryTypeView(entry.Type, i),
+            txEntryAmtView(strconv.Itoa(int(entry.Amount)), i),
+          i)
+				}
+				// <input type="hidden" name={ transaction.Tx_noOfEntries } value="2"/>
+				// <sl-button type="submit" variant="primary">Submit</sl-button>
+			</form>
+		}
+	}
+}
+
+templ transactionEntryAccountView(account string) {
+	<p>{ account }</p>
+}
+
+templ txEntryTypeView(t string, i int) {
+	<input type="radio" name={ entry.Type(i) } id={ fmt.Sprintf("%s-debit", entry.Type(i)) } value="debit" checked?={ t == "debit" } disabled/>
+	<label for={ fmt.Sprintf("%s-debit", entry.Type(i)) }>Debit</label>
+	<input type="radio" name={ entry.Type(i) } id={ fmt.Sprintf("%s-credit", entry.Type(i)) } value="credit" checked?={ t == "credit" } disabled/>
+	<label for={ fmt.Sprintf("%s-credit", entry.Type(i)) }>Credit</label>
+}
+
+templ txEntryAmtView(amt string, i int) {
+	<sl-input
+ 		type="number"
+ 		id={ entry.Amount(i) }
+ 		name={ entry.Amount(i) }
+ 		value={ amt }
+ 		disabled
+ 		label="Amount"
+	></sl-input>
+}
