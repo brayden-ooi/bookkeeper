@@ -6,7 +6,6 @@ import (
 
 	"net/http"
 
-	"github.com/brayden-ooi/bookkeeper/internal/database"
 	"github.com/brayden-ooi/bookkeeper/internal/service/account"
 	"github.com/brayden-ooi/bookkeeper/internal/service/entry"
 	"github.com/brayden-ooi/bookkeeper/internal/service/transaction"
@@ -23,6 +22,13 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 		// year := r.PostFormValue(transaction.Tx_year)
 		description := r.PostFormValue(transaction.Tx_description)
 		// date := r.PostFormValue(transaction.Tx_date)
+		noOfEntriesStr := r.PostFormValue(transaction.Tx_noOfEntries)
+
+		noOfEntries, err := strconv.Atoi(noOfEntriesStr)
+
+		if err != nil {
+			log.Fatal("invalid transaction form input")
+		}
 
 		counter, err := user.Init(ctx).GetTxCounter()
 		if err != nil {
@@ -32,11 +38,21 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 		// TODO TEMP FIELDS
 		var entry_drafts []entry.Draft
 
-		for i := range 2 {
+		for i := range noOfEntries {
+			tempAccID := r.PostFormValue(entry.AccID(i))
+			tempAccType := r.PostFormValue(entry.Type(i))
+			tempAccAmt := r.PostFormValue(entry.Amount(i))
+
+			if tempAccID == "" || tempAccType == "" || tempAccAmt == "" {
+				log.Fatal("invalid transaction form input")
+
+				return
+			}
+
 			entry_drafts = append(entry_drafts, entry.Draft{
-				AccountID: r.PostFormValue(entry.AccID(i)),
-				Type:      r.PostFormValue(entry.Type(i)),
-				Amount:    r.PostFormValue(entry.Amount(i)),
+				AccountID: tempAccID,
+				Type:      tempAccType,
+				Amount:    tempAccAmt,
 			})
 		}
 

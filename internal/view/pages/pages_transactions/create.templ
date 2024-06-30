@@ -6,8 +6,6 @@ import "github.com/brayden-ooi/bookkeeper/internal/database"
 import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
 import "fmt"
 import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
-import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
-import "github.com/brayden-ooi/bookkeeper/internal/database"
 
 templ Create(txID string, accounts []database.Account) {
 	@view.Layout() {
@@ -26,17 +24,19 @@ templ Create(txID string, accounts []database.Account) {
             txEntryAmtInput("0", i),
           i)
 				}
+				<input type="hidden" name={ transaction.Tx_noOfEntries } value="2"/>
+				<sl-button type="submit" variant="primary">Submit</sl-button>
 			</form>
 		}
 	}
 }
 
 templ txEntryAccountSelector(accounts []database.Account, i int) {
-			<select name={ entry.AccID(i) } id={ entry.AccID(i) } required>
-				for _, acc := range accounts {
-					<option value={ acc.ID }>{ acc.Name }</option>
-				}
-			</select>
+	<select name={ entry.AccID(i) } id={ entry.AccID(i) } required>
+		for _, acc := range accounts {
+			<option value={ acc.ID }>{ acc.Name }</option>
+		}
+	</select>
 }
 
 templ txEntryTypeSelector(i int) {
@@ -48,12 +48,12 @@ templ txEntryTypeSelector(i int) {
 
 templ txEntryAmtInput(amt string, i int) {
 	<sl-input
- 				type="number"
- 				id={ entry.Amount(i) }
- 				name={ entry.Amount(i) }
- 				placeholder="amount"
- 				required
- 				min="0"
+ 		type="number"
+ 		id={ entry.Amount(i) }
+ 		name={ entry.Amount(i) }
+ 		placeholder="amount"
+ 		required
+ 		min="0"
  		label="Amount"
  		value={ amt }
 	></sl-input>

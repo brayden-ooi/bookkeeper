@@ -31,6 +31,7 @@ const (
 	Tx_date        CreateTxFormKey = "date"
 	// Tx_dr_id       CreateTxFormKey = "dr_id"
 	// Tx_cr_id       CreateTxFormKey = "cr_id"
+	Tx_noOfEntries CreateTxFormKey = "noOfEntries"
 )
 
 type TxExternalIDKey = string
