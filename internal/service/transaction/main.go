@@ -72,12 +72,20 @@ func (srv *tx_service) UpdateDraft(counter int64, description string, entries []
 }
 
 // read operations
-func (srv *tx_service) GetByID(counter int) (database.Transaction, error) {
-	return service.DB.GetTransactionByUserAndID(srv.ctx, database.GetTransactionByUserAndIDParams{
+func (srv *tx_service) GetByID(counter int) (database.Transaction, []database.GetEntriesByTxRow, error) {
+	tx, err := service.DB.GetTransactionByUserAndID(srv.ctx, database.GetTransactionByUserAndIDParams{
 		UserID:  srv.user_id,
 		Counter: int64(counter),
 		Year:    int64(2024),
 	})
+
+	if err != nil {
+		return tx, []database.GetEntriesByTxRow{}, err
+	}
+
+	entries, err := entry.Init(srv.ctx).GetByTx(tx.ID)
+
+	return tx, entries, err
 }
 
 func (srv *tx_service) List() ([]database.Transaction, error) {

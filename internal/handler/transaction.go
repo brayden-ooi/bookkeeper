@@ -109,11 +109,50 @@ func GetTransaction(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("invalid read transaction argument")
 	}
 
-	tx, err := transaction.Init(ctx).GetByID(id_int)
+	tx, entries, err := transaction.Init(ctx).GetByID(id_int)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pages_transactions.Index([]database.Transaction{tx}).Render(ctx, w)
+	pages_transactions.Edit(tx, entries).Render(ctx, w)
 }
+
+// func UpdateTransaction(w http.ResponseWriter, r *http.Request) {
+// ctx := r.Context()
+
+// grab Form
+// year := r.PostFormValue(transaction.Tx_year)
+// description := r.PostFormValue(transaction.Tx_description)
+// date := r.PostFormValue(transaction.Tx_date)
+// noOfEntriesStr := r.PostFormValue(transaction.Tx_noOfEntries)
+
+// noOfEntries, err := strconv.Atoi(noOfEntriesStr)
+
+// 	if err != nil {
+// 		log.Fatal("invalid transaction form input")
+// 	}
+
+// 	var entry_drafts []entry.Draft
+
+// 	for i := range noOfEntries {
+// 		tempAccID := r.PostFormValue(entry.AccID(i))
+// 		tempAccType := r.PostFormValue(entry.Type(i))
+// 		tempAccAmt := r.PostFormValue(entry.Amount(i))
+
+// 		if tempAccID == "" || tempAccType == "" || tempAccAmt == "" {
+// 			log.Fatal("invalid transaction form input")
+
+// 			return
+// 		}
+
+// 		entry_drafts = append(entry_drafts, entry.Draft{
+// 			AccountID: tempAccID,
+// 			Type:      tempAccType,
+// 			Amount:    tempAccAmt,
+// 		})
+// 	}
+
+// 	http.Redirect(w, r, "/transactions", http.StatusSeeOther)
+
+// }

@@ -44,6 +44,10 @@ func Amount(index int) CreateEntryFormKey {
 	return fmt.Sprintf("entry[%d]_amount", index)
 }
 
+func (srv *entry_service) GetByTx(txID int64) ([]database.GetEntriesByTxRow, error) {
+	return service.DB.GetEntriesByTx(srv.ctx, txID)
+}
+
 func (srv *entry_service) Create(txID int64, draft Draft) (database.Entry, error) {
 	// validation
 	amt, err := strconv.Atoi(draft.Amount)

@@ -4,4 +4,9 @@ VALUES (?, ?, ?, ?, ?, ?)
 RETURNING *;
 
 -- name: GetEntriesByTx :many
-SELECT * FROM entries WHERE transaction_id = ?;
+SELECT
+  l.*,
+  r.Name
+FROM entries l
+LEFT JOIN accounts r ON l.account_id = r.id AND l.account_user_id = r.user_id
+WHERE transaction_id = ?;
