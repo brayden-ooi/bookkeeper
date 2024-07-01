@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
+	"github.com/brayden-ooi/bookkeeper/internal/utils"
 	"github.com/brayden-ooi/bookkeeper/internal/view/pages"
 	"github.com/brayden-ooi/bookkeeper/internal/view/pages/pages_dashboard"
 )
@@ -28,5 +29,5 @@ func NotFound() *templ.ComponentHandler {
 }
 
 func Dashboard() *templ.ComponentHandler {
-	return templ.Handler(pages_dashboard.Index())
+	return templ.Handler(pages_dashboard.Index(utils.DashboardTiles))
 }

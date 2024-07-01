@@ -1,12 +1,23 @@
 package pages_dashboard
 
 import "github.com/brayden-ooi/bookkeeper/internal/view"
+import "github.com/brayden-ooi/bookkeeper/internal/utils"
 
-templ Index() {
+templ Index(tiles []utils.DashboardTile) {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
-			Dashboard
+		@view.PageContainer("flex flex-col items-center p-5") {
+			<div class="grid grid-cols-4 gap-2">
+				for _, tile := range tiles {
+					@dashboardTile(tile)
+				}
+			</div>
 		}
 	}
+}
+
+templ dashboardTile(tile utils.DashboardTile) {
+	<div class="border border-[--sl-color-gray-300] rounded-md w-[200px] h-[100px] p-3 flex flex-col justify-center items-center">
+		<a href={ templ.URL(tile.Path) }>{ tile.Label }</a>
+	</div>
 }
