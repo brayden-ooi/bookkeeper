@@ -11,12 +11,14 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
 templ Edit(tx database.Transaction, entries []database.GetEntriesByTxRow) {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
-			<div>
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex items-center w-full">
+				<a href="/transactions"><sl-button variant="text">{ "<" }</sl-button></a>
 				<p>Transaction No. { strconv.Itoa(int(tx.Counter)) }</p>
 			</div>
 			<form action={ string(templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, tx.Year, transaction.Tx_ID, tx.Counter))) } method={ http.MethodPut } autocomplete="off">
 				@transactionDescriptionInput(tx.Description)
+				<p class="mt-4">Entries</p>
 				// entries
 				for i, entry := range entries {
 					@transactionEntry(

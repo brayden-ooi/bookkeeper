@@ -10,12 +10,14 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
 templ Create(txID string, accounts []database.Account) {
 	@view.Layout() {
 		@view.Header()
-		@view.PageContainer("flex flex-col items-center justify-center") {
-			<div>
+		@view.PageContainer("flex flex-col p-5") {
+			<div class="flex items-center w-full">
+				<a href="/transactions"><sl-button variant="text">{ "<" }</sl-button></a>
 				<p>Transaction No. { txID }</p>
 			</div>
 			<form action="/transaction/create" method={ http.MethodPost } autocomplete="off">
 				@transactionDescriptionInput("")
+				<p class="mt-4">Entries</p>
 				// entries
 				for i := range 2 {
 					@transactionEntry(

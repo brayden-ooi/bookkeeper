@@ -4,25 +4,24 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
 import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
 
 templ transactionDescriptionInput(value string) {
-	<div>
-		<label for={ transaction.Tx_description }>Description</label>
-		<input
- 			type="text"
- 			id={ transaction.Tx_description }
- 			name={ transaction.Tx_description }
- 			required
- 			value={ value }
-		/>
-	</div>
+	<sl-textarea
+ 		id={ transaction.Tx_description }
+ 		name={ transaction.Tx_description }
+ 		required
+ 		value={ value }
+ 		help-text="Information to provide more context to the transaction."
+ 		filled
+ 		label="Description"
+	></sl-textarea>
 }
 
 templ transactionEntry(txEntryAccount, txEntryType, txEntryAmt templ.Component, i int) {
-	<div class="border border-grey-200 rounded-lg p-3 m-3">
-		<div class="flex gap-2">
+	<div class="border border-grey-200 rounded-lg p-3 my-3">
+		<div class="flex gap-3">
 			<label for={ entry.AccID(i) }>Account ID</label>
 			@txEntryAccount
 		</div>
-		<div>
+		<div class="flex gap-2">
 			<p>Entry Type</p>
 			@txEntryType
 		</div>
