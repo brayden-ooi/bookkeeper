@@ -1,12 +1,9 @@
 package view
 
-const supabase_url = "https://balkzersjmltzboftidk.supabase.co"
-const supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbGt6ZXJzam1sdHpib2Z0aWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI0Nzg5OTQsImV4cCI6MjAyODA1NDk5NH0.lE3xXSAuWIMPHiTwEbM5iwDwc_3UjT2w7FJFcuHH8lk"
-
 templ Header() {
 	<header class="flex h-[80px] justify-between p-6 items-center">
 		<div>
-			<a href="/">
+			<a href="/dashboard">
 				Booku
 			</a>
 		</div>
@@ -35,8 +32,8 @@ templ Layout() {
 			<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 			<link href="/static/index.css" rel="stylesheet"/>
 			<script defer>
-        const { createClient } = supabase;
-        const _supabase = createClient(supabase_url, supabase_key);
+        // const { createClient } = supabase;
+        // const _supabase = createClient("https://balkzersjmltzboftidk.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJhbGt6ZXJzam1sdHpib2Z0aWRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTI0Nzg5OTQsImV4cCI6MjAyODA1NDk5NH0.lE3xXSAuWIMPHiTwEbM5iwDwc_3UjT2w7FJFcuHH8lk");
       </script>
 			<script>
         tailwind.config = {
