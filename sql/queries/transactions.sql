@@ -1,11 +1,12 @@
 -- name: CreateDraft :one
-INSERT INTO transactions (year, counter, description, created_at, user_id)
+INSERT INTO transactions (year, counter, description, created_at, user_id, date)
 VALUES (
   strftime('%Y'),
   (SELECT transaction_counter FROM users WHERE users.id = ? LIMIT 1) + 1,
   "",
   unixepoch(),
-  ?
+  ?,
+  unixepoch()
 )
 RETURNING *;
 
