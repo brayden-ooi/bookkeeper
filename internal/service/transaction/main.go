@@ -4,6 +4,8 @@ package transaction
 
 import (
 	"context"
+	"strconv"
+	"time"
 
 	"github.com/brayden-ooi/bookkeeper/internal/database"
 	"github.com/brayden-ooi/bookkeeper/internal/service"
@@ -29,8 +31,6 @@ type CreateTxFormKey = string
 const (
 	Tx_description CreateTxFormKey = "description"
 	Tx_date        CreateTxFormKey = "date"
-	// Tx_dr_id       CreateTxFormKey = "dr_id"
-	// Tx_cr_id       CreateTxFormKey = "cr_id"
 	Tx_noOfEntries CreateTxFormKey = "noOfEntries"
 )
 
@@ -48,13 +48,26 @@ func (srv *tx_service) CreateDraft() (database.Transaction, error) {
 	})
 }
 
-func (srv *tx_service) UpdateDraft(counter int64, description string, entries []entry.Draft) (database.Transaction, error) {
+func (srv *tx_service) UpdateDraft(counter int64, description string, entries []entry.Draft, year string, date string) (database.Transaction, error) {
 	// TODO refactor to validate entry input first
+	yearInt, err := strconv.Atoi(year)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
+	dateTime, err := time.Parse("2024-01-01", date)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
 	tx, err := service.DB.UpdateDraft(srv.ctx, database.UpdateDraftParams{
-		Year:        int64(2024),
+		Year:        int64(yearInt),
 		Description: description,
 		Counter:     counter,
 		UserID:      srv.user_id,
+		Date:        dateTime.Unix(),
 	})
 
 	if err != nil {

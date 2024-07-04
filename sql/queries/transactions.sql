@@ -14,7 +14,8 @@ RETURNING *;
 UPDATE transactions SET 
   year = ?,
   description = ?,
-  status = "active"
+  status = "active",
+  date = ?
 WHERE year = strftime('%Y') AND counter = ? AND user_id = ?
 RETURNING *;
 

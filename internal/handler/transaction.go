@@ -19,9 +19,9 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		// grab Form
-		// year := r.PostFormValue(transaction.Tx_year)
+		year := r.PostFormValue(transaction.Tx_year)
 		description := r.PostFormValue(transaction.Tx_description)
-		// date := r.PostFormValue(transaction.Tx_date)
+		date := r.PostFormValue(transaction.Tx_date)
 		noOfEntriesStr := r.PostFormValue(transaction.Tx_noOfEntries)
 
 		noOfEntries, err := strconv.Atoi(noOfEntriesStr)
@@ -56,7 +56,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
-		if _, err := transaction.Init(ctx).UpdateDraft(counter, description, entry_drafts); err != nil {
+		if _, err := transaction.Init(ctx).UpdateDraft(counter, description, entry_drafts, year, date); err != nil {
 			log.Fatal(err)
 		}
 
