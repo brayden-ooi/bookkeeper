@@ -41,7 +41,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+	// ctx := r.Context()
 
 	// TODO
 
