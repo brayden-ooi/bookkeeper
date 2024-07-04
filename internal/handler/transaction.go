@@ -103,13 +103,7 @@ func GetTransaction(w http.ResponseWriter, r *http.Request) {
 		log.Fatal("invalid read transaction argument")
 	}
 
-	id_int, err := strconv.Atoi(counter)
-
-	if err != nil {
-		log.Fatal("invalid read transaction argument")
-	}
-
-	tx, entries, err := transaction.Init(ctx).GetByID(id_int)
+	tx, entries, err := transaction.Init(ctx).GetByID(counter, year)
 
 	if err != nil {
 		log.Fatal(err)

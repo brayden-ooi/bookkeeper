@@ -4,6 +4,7 @@ package transaction
 
 import (
 	"context"
+	"log"
 	"strconv"
 	"time"
 
@@ -85,11 +86,23 @@ func (srv *tx_service) UpdateDraft(counter int64, description string, entries []
 }
 
 // read operations
-func (srv *tx_service) GetByID(counter int) (database.Transaction, []database.GetEntriesByTxRow, error) {
+func (srv *tx_service) GetByID(counter, year string) (database.Transaction, []database.GetEntriesByTxRow, error) {
+	counterInt, err := strconv.Atoi(counter)
+
+	if err != nil {
+		log.Fatal("invalid read transaction argument")
+	}
+
+	yearInt, err := strconv.Atoi(year)
+
+	if err != nil {
+		log.Fatal("invalid read transaction argument")
+	}
+
 	tx, err := service.DB.GetTransactionByUserAndID(srv.ctx, database.GetTransactionByUserAndIDParams{
 		UserID:  srv.user_id,
-		Counter: int64(counter),
-		Year:    int64(2024),
+		Counter: int64(counterInt),
+		Year:    int64(yearInt),
 	})
 
 	if err != nil {
