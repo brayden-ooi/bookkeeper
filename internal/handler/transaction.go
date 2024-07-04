@@ -76,7 +76,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// create a transaction draft
-		pages_transactions.Create(strconv.Itoa(int(draft.Counter)), accounts).Render(ctx, w)
+		pages_transactions.Create(draft, accounts).Render(ctx, w)
 	}
 }
 

@@ -6,16 +6,20 @@ import "github.com/brayden-ooi/bookkeeper/internal/database"
 import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
 import "fmt"
 import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
+import "strconv"
+import "time"
 
-templ Create(txID string, accounts []database.Account) {
+templ Create(tx database.Transaction, accounts []database.Account) {
 	@view.Layout() {
 		@view.Header()
 		@view.PageContainer("flex flex-col p-5") {
 			<div class="flex items-center w-full">
 				<a href="/transactions"><sl-button variant="text">{ "<" }</sl-button></a>
-				<p>Transaction No. { txID }</p>
+				<p>Transaction No. { strconv.Itoa(int(tx.ID)) }</p>
 			</div>
 			<form action="/transaction/create" method={ http.MethodPost } autocomplete="off">
+				<sl-input type="text" name={ transaction.Tx_year } required value={ strconv.Itoa(int(tx.Year)) } label="Year"></sl-input>
+				<input type="date" name={ transaction.Tx_date } value={ time.Unix(tx.Date, 0).Format("2024-01-01") }/>
 				@transactionDescriptionInput("")
 				<p class="mt-4">Entries</p>
 				// entries
