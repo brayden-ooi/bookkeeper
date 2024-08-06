@@ -17,7 +17,7 @@ templ Edit(tx database.Transaction, accounts []database.Account, entries []datab
 				<a href="/transactions"><sl-button variant="text">{ "<" }</sl-button></a>
 				<p>Transaction No. { strconv.Itoa(int(tx.Counter)) }</p>
 			</div>
-			<form action={ string(templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, tx.Year, transaction.Tx_ID, tx.Counter))) } method={ http.MethodPost } autocomplete="off">
+			<form action={ templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, tx.Year, transaction.Tx_ID, tx.Counter)) } method={ http.MethodPost } autocomplete="off">
 				<sl-input type="text" name={ transaction.Tx_year } required value={ strconv.Itoa(int(tx.Year)) } label="Year"></sl-input>
 				<input type="date" name={ transaction.Tx_date } value={ time.Unix(tx.Date, 0).Format(time.DateOnly) }/>
 				@transactionDescriptionInput(tx.Description)

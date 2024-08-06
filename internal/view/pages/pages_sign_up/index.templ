@@ -18,24 +18,5 @@ templ Index() {
 				<sl-button type="submit" variant="primary">Sign up</sl-button>
 			</form>
 		}
-		<script>
-		  const form = document.querySelector("#sign-up-form");
-		  form.addEventListener("submit", async (e) => {
-		    const password = document.querySelector("#sign-up-password").value;
-		    const confirmPasword = document.querySelector("#sign-up-confirm-password").value;
-
-        if (password !== confirmPasword) {
-          e.preventDefault();
-          alert("unmatched passwords");
-        }
-
-		        // const email = document.querySelector("#sign-up-email").value;
-            // const { data, error } = await _supabase.auth.signUp({
-            //   email,
-            //   password,
-            // })
-            // console.log(data, error);
-		  })
-		</script>
 	}
 }
