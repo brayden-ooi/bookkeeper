@@ -26,9 +26,21 @@ clean:
 		go clean
 
 run:
+		go run main.go
+
+start:
 		./bin/${BINARY_NAME}
 
 test:
 		go test ./...
 
 # make build
+
+miup:
+		GOOSE_MIGRATION_DIR="./sql/schema" goose sqlite3 ./index.db up
+
+midown:
+		GOOSE_MIGRATION_DIR="./sql/schema" goose sqlite3 ./index.db down
+
+sqlc:
+		sqlc generate
