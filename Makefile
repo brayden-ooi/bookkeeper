@@ -37,10 +37,10 @@ test:
 # make build
 
 miup:
-		GOOSE_MIGRATION_DIR="./sql/schema" goose sqlite3 ./index.db up
+		GOOSE_MIGRATION_DIR="./sql/schema" goose sqlite3 ./db/index.db up
 
 midown:
-		GOOSE_MIGRATION_DIR="./sql/schema" goose sqlite3 ./index.db down
+		GOOSE_MIGRATION_DIR="./sql/schema" goose sqlite3 ./db/index.db down
 
 sqlc:
 		sqlc generate
