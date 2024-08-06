@@ -11,7 +11,7 @@
 ARG GO_VERSION=1.22.2
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS build
 WORKDIR /bookkeeper
-RUN go install github.com/a-h/templ/cmd/templ@latest
+# RUN go install github.com/a-h/templ/cmd/templ@latest
 COPY . .
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
@@ -31,7 +31,6 @@ ARG TARGETARCH
 # Leverage a cache mount to /go/pkg/mod/ to speed up subsequent builds.
 # Leverage a bind mount to the current directory to avoid having to copy the
 # source code into the container.
-RUN templ generate
 RUN --mount=type=cache,target=/go/pkg/mod/ \
 #     --mount=type=bind,target=. \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server .
