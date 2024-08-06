@@ -49,7 +49,7 @@ func Execute() {
 	// transaction routes
 	mux.HandleFunc("GET /transactions", handler.ListTransactions)
 	mux.HandleFunc("GET /transaction", handler.GetTransaction)
-	// mux.HandleFunc("PUT /transaction", handler.UpdateTransaction)
+	mux.HandleFunc("POST /transaction", handler.UpdateTransaction)
 	// mux.HandleFunc("DELETE /transaction", handler.DeleteAccount)
 	mux.HandleFunc("GET /transaction/create", handler.CreateTransaction)
 	mux.HandleFunc("POST /transaction/create", handler.CreateTransaction)
