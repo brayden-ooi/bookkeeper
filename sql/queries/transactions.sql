@@ -23,7 +23,8 @@ RETURNING *;
 UPDATE transactions SET
   year = ?,
   description = ?,
-  status = ?
+  status = ?,
+  date = ?
 WHERE year = ? AND counter = ? AND user_id = ?
 RETURNING *;
 

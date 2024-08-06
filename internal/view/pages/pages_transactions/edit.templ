@@ -9,7 +9,7 @@ import "github.com/brayden-ooi/bookkeeper/internal/service/transaction"
 import "github.com/brayden-ooi/bookkeeper/internal/service/entry"
 import "time"
 
-templ Edit(tx database.Transaction, entries []database.GetEntriesByTxRow) {
+templ Edit(tx database.Transaction, accounts []database.Account, entries []database.GetEntriesByTxRow) {
 	@view.Layout() {
 		@view.Header()
 		@view.PageContainer("flex flex-col p-5") {
@@ -17,28 +17,43 @@ templ Edit(tx database.Transaction, entries []database.GetEntriesByTxRow) {
 				<a href="/transactions"><sl-button variant="text">{ "<" }</sl-button></a>
 				<p>Transaction No. { strconv.Itoa(int(tx.Counter)) }</p>
 			</div>
-			<form action={ string(templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, tx.Year, transaction.Tx_ID, tx.Counter))) } method={ http.MethodPut } autocomplete="off">
+			<form action={ string(templ.URL(fmt.Sprintf("/transaction?%s=%d&%s=%d", transaction.Tx_year, tx.Year, transaction.Tx_ID, tx.Counter))) } method={ http.MethodPost } autocomplete="off">
 				<sl-input type="text" name={ transaction.Tx_year } required value={ strconv.Itoa(int(tx.Year)) } label="Year"></sl-input>
 				<input type="date" name={ transaction.Tx_date } value={ time.Unix(tx.Date, 0).Format(time.DateOnly) }/>
 				@transactionDescriptionInput(tx.Description)
 				<p class="mt-4">Entries</p>
-				// entries
-				for i, entry := range entries {
-					@transactionEntry(
-            transactionEntryAccountView(entry.Name),
-            txEntryTypeView(entry.Type, i),
-            txEntryAmtView(strconv.Itoa(int(entry.Amount)), i),
-          i)
+				// entries, min 2
+				switch len(entries) {
+					case 0:
+						for i := range 2 {
+							@transactionEntry(
+                txEntryAccountSelector(accounts, i),
+                txEntryTypeSelector(i),
+                txEntryAmtInput("0", i),
+              i)
+						}
+						<input type="hidden" name={ transaction.Tx_noOfEntries } value="2"/>
+					default:
+						for i, entry := range entries {
+							@transactionEntry(
+                transactionEntryAccountView(entry, accounts, i),
+                txEntryTypeView(entry.Type, i),
+                txEntryAmtView(strconv.Itoa(int(entry.Amount)), i),
+              i)
+						}
 				}
-				// <input type="hidden" name={ transaction.Tx_noOfEntries } value="2"/>
-				// <sl-button type="submit" variant="primary">Submit</sl-button>
+				<sl-button type="submit" variant="primary">Submit</sl-button>
 			</form>
 		}
 	}
 }
 
-templ transactionEntryAccountView(account string) {
-	<p>{ account }</p>
+templ transactionEntryAccountView(item database.GetEntriesByTxRow, accounts []database.Account, i int) {
+	<select name={ entry.AccID(i) } id={ entry.AccID(i) } required>
+		for _, acc := range accounts {
+			<option value={ acc.ID } selected?={ item.AccountID == acc.ID }>{ acc.Name }</option>
+		}
+	</select>
 }
 
 templ txEntryTypeView(t string, i int) {
@@ -54,7 +69,6 @@ templ txEntryAmtView(amt string, i int) {
  		id={ entry.Amount(i) }
  		name={ entry.Amount(i) }
  		value={ amt }
- 		disabled
  		label="Amount"
 	></sl-input>
 }

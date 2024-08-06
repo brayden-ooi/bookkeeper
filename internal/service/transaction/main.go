@@ -42,6 +42,11 @@ const (
 	Tx_ID   TxExternalIDKey = "id"
 )
 
+type TxIdentifier struct {
+	Year int
+	ID   int
+}
+
 func (srv *tx_service) CreateDraft() (database.Transaction, error) {
 	return service.DB.CreateDraft(srv.ctx, database.CreateDraftParams{
 		ID:     srv.user_id,
@@ -57,7 +62,7 @@ func (srv *tx_service) UpdateDraft(counter int64, description string, entries []
 		return database.Transaction{}, err
 	}
 
-	dateTime, err := time.Parse("2024-01-01", date)
+	dateTime, err := time.Parse(time.DateOnly, date)
 
 	if err != nil {
 		return database.Transaction{}, err
@@ -116,4 +121,40 @@ func (srv *tx_service) GetByID(counter, year string) (database.Transaction, []da
 
 func (srv *tx_service) List() ([]database.Transaction, error) {
 	return service.DB.ListTransactionsByUser(srv.ctx, srv.user_id)
+}
+
+func (srv *tx_service) Update(counter, description, yearPrev, yearNext, date string) (database.Transaction, error) {
+	counterInt, err := strconv.Atoi(counter)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
+	yearPrevInt, err := strconv.Atoi(yearPrev)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
+	yearNextInt, err := strconv.Atoi(yearNext)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
+	dateTime, err := time.Parse(time.DateOnly, date)
+
+	if err != nil {
+		return database.Transaction{}, err
+	}
+
+	return service.DB.UpdateTransaction(srv.ctx, database.UpdateTransactionParams{
+		Year:        int64(yearNextInt),
+		Description: description,
+		Status:      "active",
+		Date:        dateTime.Unix(),
+		Year_2:      int64(yearPrevInt),
+		Counter:     int64(counterInt),
+		UserID:      srv.user_id,
+	})
 }

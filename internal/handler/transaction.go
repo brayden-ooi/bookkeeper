@@ -53,6 +53,7 @@ func CreateTransaction(w http.ResponseWriter, r *http.Request) {
 				AccountID: tempAccID,
 				Type:      tempAccType,
 				Amount:    tempAccAmt,
+				SeqNum:    i,
 			})
 		}
 
@@ -109,44 +110,56 @@ func GetTransaction(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	pages_transactions.Edit(tx, entries).Render(ctx, w)
+	// fetch accounts
+	accounts, err := account.Init(ctx).List()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pages_transactions.Edit(tx, accounts, entries).Render(ctx, w)
 }
 
-// func UpdateTransaction(w http.ResponseWriter, r *http.Request) {
-// ctx := r.Context()
+func UpdateTransaction(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
 
-// grab Form
-// year := r.PostFormValue(transaction.Tx_year)
-// description := r.PostFormValue(transaction.Tx_description)
-// date := r.PostFormValue(transaction.Tx_date)
-// noOfEntriesStr := r.PostFormValue(transaction.Tx_noOfEntries)
+	// grab Form
+	yearPrev := r.URL.Query().Get(transaction.Tx_year)
+	counter := r.URL.Query().Get(transaction.Tx_ID)
+	yearNext := r.PostFormValue(transaction.Tx_year)
+	description := r.PostFormValue(transaction.Tx_description)
+	date := r.PostFormValue(transaction.Tx_date)
+	// noOfEntriesStr := r.PostFormValue(transaction.Tx_noOfEntries)
 
-// noOfEntries, err := strconv.Atoi(noOfEntriesStr)
+	// noOfEntries, err := strconv.Atoi(noOfEntriesStr)
 
-// 	if err != nil {
-// 		log.Fatal("invalid transaction form input")
-// 	}
+	// if err != nil {
+	// 	log.Fatal("invalid transaction form input")
+	// }
 
-// 	var entry_drafts []entry.Draft
+	// var entry_drafts []entry.Draft
 
-// 	for i := range noOfEntries {
-// 		tempAccID := r.PostFormValue(entry.AccID(i))
-// 		tempAccType := r.PostFormValue(entry.Type(i))
-// 		tempAccAmt := r.PostFormValue(entry.Amount(i))
+	// for i := range noOfEntries {
+	// 	tempAccID := r.PostFormValue(entry.AccID(i))
+	// 	tempAccType := r.PostFormValue(entry.Type(i))
+	// 	tempAccAmt := r.PostFormValue(entry.Amount(i))
 
-// 		if tempAccID == "" || tempAccType == "" || tempAccAmt == "" {
-// 			log.Fatal("invalid transaction form input")
+	// 	if tempAccID == "" || tempAccType == "" || tempAccAmt == "" {
+	// 		log.Fatal("invalid transaction form input")
 
-// 			return
-// 		}
+	// 		return
+	// 	}
 
-// 		entry_drafts = append(entry_drafts, entry.Draft{
-// 			AccountID: tempAccID,
-// 			Type:      tempAccType,
-// 			Amount:    tempAccAmt,
-// 		})
-// 	}
+	// 	entry_drafts = append(entry_drafts, entry.Draft{
+	// 		AccountID: tempAccID,
+	// 		Type:      tempAccType,
+	// 		Amount:    tempAccAmt,
+	// 		SeqNum:    i,
+	// 	})
+	// }
 
-// 	http.Redirect(w, r, "/transactions", http.StatusSeeOther)
+	if _, err := transaction.Init(ctx).Update(counter, description, yearPrev, yearNext, date); err != nil {
+		log.Fatal(err)
+	}
 
-// }
+	http.Redirect(w, r, "/transactions", http.StatusSeeOther)
+}

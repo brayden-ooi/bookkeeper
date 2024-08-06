@@ -15,6 +15,7 @@ type Draft struct {
 	AccountID string
 	Type      string
 	Amount    string
+	SeqNum    int
 }
 
 type entry_service struct {
@@ -70,6 +71,7 @@ func (srv *entry_service) Create(txID int64, draft Draft) (database.Entry, error
 		AccountID:     draft.AccountID,
 		AccountUserID: srv.user_id,
 		TransactionID: txID,
+		SeqNum:        int64(draft.SeqNum),
 	})
 }
 
